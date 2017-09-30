@@ -1,0 +1,6 @@
+
+- add Button on World map is not adjusted for differing screen sizes
+
+ViewController - FetchUser()
+- accesses all bubbles instead of specific ones
+
