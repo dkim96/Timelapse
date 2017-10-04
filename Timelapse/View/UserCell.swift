@@ -67,11 +67,23 @@ class UserCell: UITableViewCell {
         return label
     }()
     
+    let photoImageView: UIImageView = {
+        let imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "avatar")
+        imageView.layer.cornerRadius = 24
+        imageView.layer.masksToBounds = true
+        imageView.contentMode = .scaleAspectFill
+        return imageView
+    }()
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: .subtitle, reuseIdentifier: reuseIdentifier)
         
         addSubview(profileImageView)
         addSubview(timeLabel)
+        addSubview(photoImageView)
+        //addSubview(textLabel!)
         
         //ios 9 constraint anchors
         //need x,y,width,height anchors
@@ -85,6 +97,15 @@ class UserCell: UITableViewCell {
         timeLabel.topAnchor.constraint(equalTo: self.topAnchor, constant: 18).isActive = true
         timeLabel.widthAnchor.constraint(equalToConstant: 100).isActive = true
         timeLabel.heightAnchor.constraint(equalTo: (textLabel?.heightAnchor)!).isActive = true
+        
+        photoImageView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -12).isActive = true
+        photoImageView.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        photoImageView.widthAnchor.constraint(equalToConstant: 48).isActive = true
+        photoImageView.heightAnchor.constraint(equalToConstant: 48).isActive = true
+        /*NSLayoutConstraint.activate([
+            textLabel?.topAnchor.constraint(equalTo: profileImageView.topAnchor, constant: 10),
+            textLabel?.leftAnchor.constraint(equalTo: profileImageView.rightAnchor, constant: 10)
+            ])*/
     }
     
     required init?(coder aDecoder: NSCoder) {

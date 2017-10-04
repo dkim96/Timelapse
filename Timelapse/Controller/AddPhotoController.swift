@@ -61,10 +61,10 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
         return button
     }()
     
-    func takePhoto(){
+    @objc func takePhoto(){
         if UIImagePickerController.availableCaptureModes(for: .rear) != nil {
         imagePicker =  UIImagePickerController()
-        imagePicker.delegate = self as! UIImagePickerControllerDelegate & UINavigationControllerDelegate
+        imagePicker.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
         imagePicker.sourceType = .camera
         present(imagePicker, animated: true, completion: nil)
         } else {
@@ -72,7 +72,7 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
         }
     }
     
-    func sendToFB(){
+    @objc func sendToFB(){
         //add iteration to show only when photo taken : LATER
         // get referance to picture and location
         
@@ -240,7 +240,7 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
         
     }
     
-    func handleCancel() {
+    @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
     
@@ -279,8 +279,8 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func getCoordinates(lat:CLLocationDegrees, lon:CLLocationDegrees){
-        imgLat = lat as! CLLocationDegrees
-        imgLon = lon as! CLLocationDegrees
+        imgLat = lat 
+        imgLon = lon 
     }
 ///////////////////////////////// ChatLogController reference ///////////////
 

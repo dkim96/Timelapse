@@ -48,7 +48,7 @@ class PhotoViewController: UIViewController, UINavigationControllerDelegate {
         profileImageView.heightAnchor.constraint(equalToConstant: 300).isActive = true
     }
     
-    func handleCancel() {
+    @objc func handleCancel() {
         dismiss(animated: true, completion: nil)
     }
     

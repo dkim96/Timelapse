@@ -13,20 +13,7 @@ import CoreLocation
 
 extension ViewController {
     
-    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        //if(locationRepeat){
-        var locValue:CLLocationCoordinate2D = manager.location!.coordinate
-       // print("locations = \(locValue.latitude) \(locValue.longitude)")
-        locationRepeat = false
-        myLatitude = locValue.latitude
-        myLongitude = locValue.longitude
-        xaddphotoController.getCoordinates(lat: locValue.latitude, lon: locValue.longitude)
-        xaddphotoController.imgLat = myLatitude
-        xaddphotoController.imgLon = myLongitude
-    }
-    
-    
-    func handleLogout() {
+    @objc func handleLogout() {
         
         do {
             try FIRAuth.auth()?.signOut()
@@ -59,54 +46,13 @@ extension ViewController {
         
         let searchx = UIImage(named: "search")
         let imageView2 = UIImageView(image:searchx)
-        let doneItem = UIBarButtonItem.init(image: #imageLiteral(resourceName: "search"), style: .plain, target: nil, action: "selector")
+        let doneItem = UIBarButtonItem.init(image: #imageLiteral(resourceName: "search"), style: .plain, target: nil, action: #selector(getter: UIAccessibilityCustomAction.selector))
         doneItem.tintColor = UIColor.black
         navItem.rightBarButtonItem = doneItem;
         navBar.setItems([navItem], animated: false);
     }
     
-    func action(gestureRecognizer: UIGestureRecognizer) {
-        //print("?")
-        if(gestureRecognizer.state == UIGestureRecognizerState.began) //YASSSS
-        {
-            var annotationView:MKPinAnnotationView!
-            var touchPoint = gestureRecognizer.location(in: self.mapView)
-            var newCoordinate: CLLocationCoordinate2D = mapView.convert(touchPoint, toCoordinateFrom: self.mapView)
-            
-            var pointAnnoation:CustomPointAnnotation!
-            pointAnnoation = CustomPointAnnotation()
-            pointAnnoation.pinCustomImageName = "pin"
-            pointAnnoation.coordinate = newCoordinate
-            pointAnnoation.customUIImage = UIImage(named: "pin")
-            annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
-            self.mapView.addAnnotation(annotationView.annotation!)
-            //zoomToFitMapAnnotations(aMapView: mapView)
-        }
-    }
-    
-    func mapView(_ mapView: MKMapView,
-                 viewFor annotation: MKAnnotation) -> MKAnnotationView?{
-        
-        let reuseIdentifier = "pin"
-        
-        var v = mapView.dequeueReusableAnnotationView(withIdentifier: reuseIdentifier)
-        if v == nil {
-            v = MKAnnotationView(annotation: annotation, reuseIdentifier: reuseIdentifier)
-            v!.canShowCallout = false // title subtitle show
-        }
-        else {
-            v!.annotation = annotation
-        }
-        
-        let customPointAnnotation = annotation as! CustomPointAnnotation
-        v!.image = customPointAnnotation.customUIImage
-        print("VIMAGE: \(v!.image)")
-        
-        if annotation is MKUserLocation{
-            return nil
-        }
-        return v
-    }
+
     
     func setupAddPhoto() {
         //need x, y, width, height constraints
@@ -116,41 +62,28 @@ extension ViewController {
         //addPhoto.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
     
-    func zoomToFitMapAnnotations(aMapView: MKMapView) {
-        if aMapView.annotations.count == 0 {
-            return
-        }
-        var topLeftCoord: CLLocationCoordinate2D = CLLocationCoordinate2D()
-        topLeftCoord.latitude = -90
-        topLeftCoord.longitude = 180
-        var bottomRightCoord: CLLocationCoordinate2D = CLLocationCoordinate2D()
-        bottomRightCoord.latitude = 90
-        bottomRightCoord.longitude = -180
-        for annotation: MKAnnotation in mapView.annotations as! [MKAnnotation]{
-            topLeftCoord.longitude = fmin(topLeftCoord.longitude, annotation.coordinate.longitude)
-            topLeftCoord.latitude = fmax(topLeftCoord.latitude, annotation.coordinate.latitude)
-            bottomRightCoord.longitude = fmax(bottomRightCoord.longitude, annotation.coordinate.longitude)
-            bottomRightCoord.latitude = fmin(bottomRightCoord.latitude, annotation.coordinate.latitude)
-        }
+    func setupSpanMult(){
+        spanMultiplierAdd.centerXAnchor.constraint(equalTo: addPhoto.centerXAnchor).isActive = true
+        spanMultiplierAdd.bottomAnchor.constraint(equalTo: addPhoto.topAnchor, constant: -10).isActive = true
+        spanMultiplierAdd.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        spanMultiplierAdd.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        var region: MKCoordinateRegion = MKCoordinateRegion()
-        region.center.latitude = topLeftCoord.latitude - (topLeftCoord.latitude - bottomRightCoord.latitude) * 0.5
-        region.center.longitude = topLeftCoord.longitude + (bottomRightCoord.longitude - topLeftCoord.longitude) * 0.5
+        spanMultiplierSub.centerXAnchor.constraint(equalTo: addPhoto.centerXAnchor).isActive = true
+        spanMultiplierSub.bottomAnchor.constraint(equalTo: spanMultiplierAdd.topAnchor, constant: -10).isActive = true
+        spanMultiplierSub.widthAnchor.constraint(equalToConstant: 40).isActive = true
+        spanMultiplierSub.heightAnchor.constraint(equalToConstant: 40).isActive = true
         
-        var span1 = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 3
-        var span2 = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 3
-        print("\(span1) and \(span2)")
-        if(span1 <= 180 && span2 <= 180)
-        {
-            region.span.latitudeDelta = fabs(topLeftCoord.latitude - bottomRightCoord.latitude) * 3
-            region.span.longitudeDelta = fabs(bottomRightCoord.longitude - topLeftCoord.longitude) * 3
-        }
-        else{
-            region.span.latitudeDelta = 180
-            region.span.longitudeDelta = 180
-        }
-        region = aMapView.regionThatFits(region)
-        mapView.setRegion(region, animated: true)
+        spanMultiplierAdd.layer.zPosition = 4
+        spanMultiplierSub.layer.zPosition = 4
+    }
+    
+    func setupMyStoryandGlobal()
+    {
+        myStoryandGlobal.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        myStoryandGlobal.topAnchor.constraint(equalTo: view.topAnchor, constant: 70).isActive = true
+        myStoryandGlobal.layer.zPosition = 5
+        //myStoryandGlobal.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        //myStoryandGlobal.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
     
 }

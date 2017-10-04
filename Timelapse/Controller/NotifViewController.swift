@@ -1,36 +1,95 @@
 
+//
+//  NewMessageController.swift
+//  gameofchats
+//
+//  Created by Brian Voong on 6/29/16.
+//  Copyright © 2016 letsbuildthatapp. All rights reserved.
+//
+
 import UIKit
 import Firebase
 
-class NotifViewController: UIViewController {
+class NotifViewController: UITableViewController {
     
-    let profileImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.image = UIImage(named: "Notifications")
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.contentMode = .scaleAspectFill
-        return imageView
-    }()
+    let cellId = "cellId"
+    
+    var users = [User]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        view.addSubview(profileImageView)
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
-        setupProfileImageView()
+        tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
+        
+        fetchUser()
     }
     
-    
-    func setupProfileImageView() {
-        //need x, y, width, height constraints
-        profileImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        profileImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-        //profileImageView.widthAnchor.constraint(equalToConstant: 150).isActive = true
-        //profileImageView.heightAnchor.constraint(equalToConstant: 150).isActive = true
+    override func viewDidAppear(_ animated: Bool) {
+        //fetchUser()
     }
     
-    override var preferredStatusBarStyle : UIStatusBarStyle {
-        return .lightContent
+    func fetchUser() {
+        FIRDatabase.database().reference().child("users").observe(.childAdded, with: { (snapshot) in
+            
+            if let dictionary = snapshot.value as? [String: AnyObject] {
+                let user = User(dictionary: dictionary)
+                user.id = snapshot.key
+                self.users.append(user)
+                
+                //this will crash because of background thread, so lets use dispatch_async to fix
+                DispatchQueue.main.async(execute: {
+                    self.tableView.reloadData()
+                })
+                
+                //                user.name = dictionary["name"]
+            }
+            
+        }, withCancel: nil)
+    }
+    
+    @objc func handleCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return users.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! UserCell
+        
+        let user = users[indexPath.row]
+        cell.textLabel?.text = user.name
+        cell.detailTextLabel?.text = user.email
+        
+        if let profileImageUrl = user.profileImageUrl {
+            cell.profileImageView.loadImageUsingCacheWithUrlString(profileImageUrl)
+        }
+        
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 72
+    }
+    
+    // var messagesController: ViewController?
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("Dismiss completed")
+        let user = self.users[indexPath.row]
+        let profileViewController = ProfileViewController()
+        self.present(profileViewController, animated: true, completion: nil)
+        //tableView.deselectRow(at: indexPath, animated: true)
+        //self.messagesController?.showChatControllerForUser(user)
+        
+        
+    }
+    
+    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        
     }
     
 }

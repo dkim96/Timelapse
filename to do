@@ -12,3 +12,50 @@ Notifications list
 Search engine (?)
 
 Design aspects: color coded pins, fixed zoom in patterns, hold to show multi pin view.
+
+
+Multipin view:
+select, fixed view, remove scrolling
+deselect by clicking outside, remove view, enable scrolling
+
+
+(ADV)Recognize Colliding Annotations
+Given a set of pins, determine whether there exists a group within a specific span.
+
+straight forward double for loop, every combination
+if(distance between two locations < span/10) // colliding!
+
+Grouped Pins: if pins are close enough together, replace them with a numbered pin, and show multi image view
+
+If pins are grouped -> create a new pin group taking the average location, remove both pins and put in this new pin to the for loop.
+
+New Pin: Bubbles and newLocation
+
+isColliding sorted groups // only when span changes!!!
+- (... hmm technically you might not have to remove)
+- remove pins in groups and replace them with grouped pins
+- keep track of removed pins to read later on
+
+
+
+(ADV)Long Pressing an Annotation: Technology nonexistant
+If a bubble was long pressed,
+    examine the position of that bubble
+        print the item a few positions above it
+when the bubble is let go
+    remove contents.
+
+later: examining space for colliding bubbles and printing it on the long press
+
+// UILPGR- long press for action
+let uilpgr = UILongPressGestureRecognizer(target: self, action: #selector(action))
+uilpgr.minimumPressDuration = 0.5
+mapView.addGestureRecognizer(uilpgr)
+
+mapView didSelect, didDeselect
+S- tap, press, init
+D- when another annot is tapped, or manually selected
+
+
+
+
