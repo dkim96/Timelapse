@@ -6,5 +6,7 @@ The basis of the application comes down to visualizing our content in accordance
 
 Over time, the friends that we used to have will spread out across the world and the goal of this application is to visualize the way our friends impact the world around us.
 
+#NOTE# An essential extension is missing from a ViewController, please message me by email to obtain access to a working prototype.
+
 ![Timelapse preview](/samplemap.png?raw=true "Optional Title")
 
