@@ -74,7 +74,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup1), for: .touchUpInside)
         return playButton
     }()
     var multiPin2: SpringButton = {
@@ -84,7 +84,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup2), for: .touchUpInside)
         return playButton
     }()
     var multiPin3: SpringButton = {
@@ -94,7 +94,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup3), for: .touchUpInside)
         return playButton
     }()
     var multiPin4: SpringButton = {
@@ -104,7 +104,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup4), for: .touchUpInside)
         return playButton
     }()
     var multiPin5: SpringButton = {
@@ -114,7 +114,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup5), for: .touchUpInside)
         return playButton
     }()
     var multiPin6: SpringButton = {
@@ -124,7 +124,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         playButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
         playButton.translatesAutoresizingMaskIntoConstraints = false
         playButton.contentMode = .scaleAspectFill
-        //playButton.addTarget(self, action: nil, for: .touchUpInside)
+        playButton.addTarget(self, action: #selector(handleGroup6), for: .touchUpInside)
         return playButton
     }()
     
@@ -135,9 +135,12 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
     // }()
     
     var bubbles = [Bubble]()
-    var images = [UIImage]()
+    var images = [String:UIImage]()
     var groups = [[Int]]()
     var distances = [[Double]]()
+    var pins = [[String]]()
+    var bubblePos = [String]()
+    let manager = CLLocationManager()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -209,21 +212,30 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         view.addSubview(spanMultiplierAdd)
         view.addSubview(spanMultiplierSub)
         setupSpanMult()
+
     }
     
     func fetchUser() {
+        
         FIRDatabase.database().reference().child("bubbles").observe(.childAdded, with: { (snapshot) in
             
             if let dictionary = snapshot.value as? [String: AnyObject] {
+                //print("1")
                 let bubble = Bubble(dictionary: dictionary)
                 bubble.id = snapshot.key
+                //print(bubble.id)
                 self.bubbles.append(bubble)
+                //print(self.bubbles.count)
+
                 
                 let messagesRef = FIRDatabase.database().reference().child("users").child(bubble.fromId!).child("profileImageUrl")
+                 //let messagesRef = FIRStorage.storage().reference().child("bubble_images").child("2273DC69-0A78-48E5-8F66-2D688957E65E")
+                //print("2")
                 messagesRef.observeSingleEvent(of: .value, with: { (snapshot) in
                     
                     guard let photoLink = snapshot.value else {return}
-                    self.displayBubbles(bubble: bubble, url: photoLink as! String)
+                    //print("!")
+                    self.displayBubbles(bubble: bubble, url: photoLink as! String, count: String(self.bubbles.count-1))
                     
                     
                 }, withCancel: nil)
@@ -235,16 +247,65 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             }
             
         }, withCancel: nil)
+
+        //print("fetch")
+        
+
+        
     }
     
-    func displayBubbles(bubble : Bubble, url : String){
+    func displayBubbles(bubble: Bubble, url: String, count: String){
         // access img and loc and display as pin
         
-        //var image: UIImage!
         let url = URL(string: url)
+        
+        DispatchQueue.global().async {
+            let data = try? Data(contentsOf: url!) //make sure your image in this url does exist, otherwise unwrap in a if let check / try-catch
+            DispatchQueue.main.async {
+                let image: UIImage = UIImage(data: data!)!
+                //self.images.append(image)
+                self.images[bubble.id!] = image
+
+                let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 50, height: 50), cornerRadius: CGFloat(20))
+                let backgroundImage = UIImage(named: "bluepin")
+                
+                UIGraphicsBeginImageContextWithOptions(backgroundImage!.size, false, 0.0)
+                backgroundImage!.draw(in: CGRect(x: 0.0, y: 0.0, width: 58, height: 58))
+                watermarkImage.draw(in: CGRect(x: 3.8, y: 3.6, width: 49, height: 49))
+                
+                let result = UIGraphicsGetImageFromCurrentImageContext()
+                UIGraphicsEndImageContext()
+                
+                
+                
+                var annotationView:MKPinAnnotationView!
+                //let uilpgr = UILongPressGestureRecognizer(target: self, action: #selector(action))
+                //uilpgr.minimumPressDuration = 0.5
+                //var touchPoint = gestureRecognizer.location(in: self.mapView)
+                var newCoordinate: CLLocationCoordinate2D = CLLocationCoordinate2DMake(bubble.latitude!, bubble.longitude!)
+                var pointAnnoation:CustomPointAnnotation!
+                pointAnnoation = CustomPointAnnotation()
+                pointAnnoation.title = bubble.id
+                pointAnnoation.subtitle = count
+               
+                self.self.counter = self.counter + 1
+                pointAnnoation.pinCustomImageName = "pin"
+                pointAnnoation.coordinate = newCoordinate
+                pointAnnoation.customUIImage = result
+                annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
+                //annotationView.addGestureRecognizer(uilpgr)
+                self.mapView.addAnnotation(annotationView.annotation!)
+            }
+        }
+        
+        /*let url = URL(string: url)
+        //print(url)
         let data = try? Data(contentsOf: url!)
+        print(data)
         let image: UIImage = UIImage(data: data!)!
         images.append(image)
+        print(image)*/
+        /*
         let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 50, height: 50), cornerRadius: CGFloat(20))
         let backgroundImage = UIImage(named: "bluepin")
 
@@ -273,10 +334,14 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
         annotationView = MKPinAnnotationView(annotation: pointAnnoation, reuseIdentifier: "pin")
         //annotationView.addGestureRecognizer(uilpgr)
         self.mapView.addAnnotation(annotationView.annotation!)
+         */
     }
     
     func isColliding(curSpan: Double) {
         groups.removeAll()
+        distances.removeAll()
+        pins.removeAll()
+        
         if(bubbles.count < 2) {return}
         for i in 0...bubbles.count-2 {
             for j in i+1...bubbles.count-1{
@@ -286,17 +351,20 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 if(distance < curSpan/20){ // curSpan/10 is touching distance
                     // intersection found
                     //print(i, j, "intersect!")
-                    sortGroups(i: i, j: j)
+                    //bubbles[i].id
+                    //bubbles[j].id
+                    sortGroups(i: i, j: j, iID: bubbles[i].id!, jID: bubbles[j].id!)
                     
                 }
             }
         }
     }
     
-    func sortGroups(i: Int, j: Int) // given two bubbles, assign them to a pair or make new
+    func sortGroups(i: Int, j: Int, iID: String, jID: String) // given two bubbles, assign them to a pair or make new
     {
         if(groups.count == 0){
             groups.append([i,j])
+            pins.append([bubbles[i].id!, bubbles[j].id!])
             let avgLong = (bubbles[i].longitude! + bubbles[j].longitude!)/2
             let avgLat = (bubbles[i].latitude! + bubbles[j].latitude!)/2
             distances.append([avgLong,avgLat])
@@ -309,6 +377,7 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
                 if(a == groups.count-1)
                 {
                 groups.append([i,j])
+                pins.append([bubbles[i].id!, bubbles[j].id!])
                 let avgLong = (bubbles[i].longitude! + bubbles[j].longitude!)/2
                 let avgLat = (bubbles[i].latitude! + bubbles[j].latitude!)/2
                 distances.append([avgLong,avgLat])
@@ -318,9 +387,11 @@ class ViewController: UIViewController, MKMapViewDelegate, CLLocationManagerDele
             if(output.count == 1){// search for other
                 if(output[0] == i){
                     groups[a].append(j)
+                    pins[a].append(bubbles[j].id!)
                 }
                 else{
                     groups[a].append(i)
+                    pins[a].append(bubbles[i].id!)
                 }
                 return
             }

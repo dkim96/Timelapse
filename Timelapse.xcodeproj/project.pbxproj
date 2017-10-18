@@ -18,6 +18,7 @@
 		E7253D0D1F79804000A263B2 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E7253D0B1F79804000A263B2 /* LaunchScreen.storyboard */; };
 		E7253D151F79810500A263B2 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E7253D141F79810500A263B2 /* LoginController.swift */; };
 		E7253D171F79815E00A263B2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = E7253D161F79815E00A263B2 /* GoogleService-Info.plist */; };
+		E73296FD1F8C314700225B8B /* CustomTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E73296FC1F8C314700225B8B /* CustomTabBarController.swift */; };
 		E78682481F7E147400B44B90 /* ViewControllerExt.swift in Sources */ = {isa = PBXBuildFile; fileRef = E78682471F7E147400B44B90 /* ViewControllerExt.swift */; };
 		E786824A1F7E1C0000B44B90 /* ideas in Resources */ = {isa = PBXBuildFile; fileRef = E78682491F7E1C0000B44B90 /* ideas */; };
 		E786824C1F7E1CE500B44B90 /* Bubble.swift in Sources */ = {isa = PBXBuildFile; fileRef = E786824B1F7E1CE500B44B90 /* Bubble.swift */; };
@@ -81,6 +82,7 @@
 		E7253D0E1F79804000A263B2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E7253D141F79810500A263B2 /* LoginController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		E7253D161F79815E00A263B2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		E73296FC1F8C314700225B8B /* CustomTabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTabBarController.swift; sourceTree = "<group>"; };
 		E78682471F7E147400B44B90 /* ViewControllerExt.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewControllerExt.swift; sourceTree = "<group>"; };
 		E78682491F7E1C0000B44B90 /* ideas */ = {isa = PBXFileReference; lastKnownFileType = text; path = ideas; sourceTree = "<group>"; };
 		E786824B1F7E1CE500B44B90 /* Bubble.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bubble.swift; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 		E78682511F7EBE5200B44B90 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E73296FC1F8C314700225B8B /* CustomTabBarController.swift */,
 				E7253D141F79810500A263B2 /* LoginController.swift */,
 				E7253D041F79804000A263B2 /* ViewController.swift */,
 				E78682521F7F497500B44B90 /* PhotoViewController.swift */,
@@ -426,6 +429,7 @@
 				E7CFA8BF1F80CF0100E18F22 /* DesignableView.swift in Sources */,
 				E7CFA8B61F80CF0100E18F22 /* AsyncImageView.swift in Sources */,
 				E7253D051F79804000A263B2 /* ViewController.swift in Sources */,
+				E73296FD1F8C314700225B8B /* CustomTabBarController.swift in Sources */,
 				E7CFA8CC1F80CF0100E18F22 /* SpringTextField.swift in Sources */,
 				E786824C1F7E1CE500B44B90 /* Bubble.swift in Sources */,
 				E7253D151F79810500A263B2 /* LoginController.swift in Sources */,

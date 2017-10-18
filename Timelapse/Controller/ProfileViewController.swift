@@ -4,6 +4,10 @@ import Firebase
 
 class ProfileViewController: UIViewController {
     
+    @objc func handleCancel() {
+        dismiss(animated: true, completion: nil)
+    }
+    
     let overlayView: UIImageView = {
         let imageView = UIImageView()
         imageView.image = UIImage(named: "overlay")
@@ -26,7 +30,7 @@ class ProfileViewController: UIViewController {
         button.tintColor = UIColor.white
         button.setImage(UIImage(named: "more"), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        //button.addTarget(self, action: #selector(changeSpanSub), for: .touchUpInside)
+        button.addTarget(self, action: #selector(handleCancel), for: .touchUpInside)
         return button
     }()
     var followB: UIButton = {
@@ -152,6 +156,10 @@ class ProfileViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.title = "Profile"
+        
+        
+        
         view.backgroundColor = UIColor.white
         view.addSubview(backgroundView)
         view.addSubview(overlayView)
@@ -168,16 +176,16 @@ class ProfileViewController: UIViewController {
         view.addSubview(followingField)
         view.addSubview(nfollowerField)
         view.addSubview(nfollowingField)
-
+        
         setupOverlay()
     }
     
     func setupOverlay() {
         overlayView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        overlayView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        overlayView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
         
         backgroundView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        backgroundView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        backgroundView.topAnchor.constraint(equalTo: view.topAnchor, constant: 40).isActive = true
         
         moreB.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15).isActive = true
         moreB.topAnchor.constraint(equalTo: overlayView.topAnchor, constant: 35).isActive = true

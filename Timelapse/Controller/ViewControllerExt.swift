@@ -34,22 +34,17 @@ extension ViewController {
     
     func setupNavBar(){
         // NAVBAR SETUP
-        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 180))
-        self.view.addSubview(navBar);
-        
-        let navItem = UINavigationItem(title: "Timelapse");
-        navItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
         let logo = UIImage(named: "tl")
         let imageView = UIImageView(image:logo)
-        navItem.titleView = imageView
-        navBar.layer.zPosition = 3
-        
+        navigationItem.titleView = imageView
         let searchx = UIImage(named: "search")
         let imageView2 = UIImageView(image:searchx)
         let doneItem = UIBarButtonItem.init(image: #imageLiteral(resourceName: "search"), style: .plain, target: nil, action: #selector(getter: UIAccessibilityCustomAction.selector))
         doneItem.tintColor = UIColor.black
-        navItem.rightBarButtonItem = doneItem;
-        navBar.setItems([navItem], animated: false);
+        navigationItem.rightBarButtonItem = doneItem;
+        
+
     }
     
 
@@ -57,7 +52,7 @@ extension ViewController {
     func setupAddPhoto() {
         //need x, y, width, height constraints
         addPhoto.centerXAnchor.constraint(equalTo: view.centerXAnchor, constant: 140).isActive = true
-        addPhoto.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -60).isActive = true
+        addPhoto.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
         //addPhoto.widthAnchor.constraint(equalToConstant: 150).isActive = true
         //addPhoto.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
@@ -85,5 +80,43 @@ extension ViewController {
         //myStoryandGlobal.widthAnchor.constraint(equalToConstant: 150).isActive = true
         //myStoryandGlobal.heightAnchor.constraint(equalToConstant: 150).isActive = true
     }
+    
+    func handleGroup1(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[0]
+        photoviewController.profilePic = images[bubblePos[0]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    func handleGroup2(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[1]
+        photoviewController.profilePic = images[bubblePos[1]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    func handleGroup3(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[2]
+        photoviewController.profilePic = images[bubblePos[2]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    func handleGroup4(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[3]
+        photoviewController.profilePic = images[bubblePos[3]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    func handleGroup5(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[4]
+        photoviewController.profilePic = images[bubblePos[4]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    func handleGroup6(){
+        let photoviewController = PhotoViewController()
+        photoviewController.photoId = bubblePos[5]
+        photoviewController.profilePic = images[bubblePos[5]]!
+        present(photoviewController, animated: true, completion: nil)
+    }
+    
     
 }

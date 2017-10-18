@@ -17,34 +17,16 @@ class SearchViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.title = "Search"
+        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        setupNavBar()
+        //setupNavBar()
         fetchUser()
         self.navigationItem.rightBarButtonItem = self.editButtonItem;
     }
     
-    func setupNavBar(){
-        // NAVBAR SETUP
-        let navBar: UINavigationBar = UINavigationBar(frame: CGRect(x: 0, y: 20, width: view.frame.size.width, height: 180))
-        self.view.addSubview(navBar);
-        
-        let navItem = UINavigationItem(title: "Notifications");
-        //navItem.leftBarButtonItem = UIBarButtonItem(title: "Logout", style: .plain, target: self, action: #selector(handleLogout))
-        //let logo = UIImage(named: "tl")
-        //let imageView = UIImageView(image:logo)
-        //navItem.titleView = imageView
-        navBar.layer.zPosition = 3
-        
-        //let searchx = UIImage(named: "search")
-        //let imageView2 = UIImageView(image:searchx)
-        //let doneItem = UIBarButtonItem.init(image: #imageLiteral(resourceName: "search"), style: .plain, target: nil, action: "selector")
-        //doneItem.tintColor = UIColor.black
-        //navItem.rightBarButtonItem = doneItem;
-        navBar.setItems([navItem], animated: false);
-    }
+
     
     override func viewDidAppear(_ animated: Bool) {
         //fetchUser()

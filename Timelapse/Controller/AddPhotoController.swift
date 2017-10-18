@@ -20,7 +20,7 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     let locationManager = CLLocationManager()
     let mapView = MKMapView()
-    var imagePicker: UIImagePickerController!
+    var imagePicker = UIImagePickerController()
     var selectedImage : UIImage!
     var imgLat : CLLocationDegrees? = nil
     var imgLon : CLLocationDegrees? = nil
@@ -177,6 +177,8 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        imagePicker.allowsEditing = true
+        
         view.backgroundColor = UIColor.white
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
@@ -272,6 +274,7 @@ class AddPhotoController: UIViewController, UIImagePickerControllerDelegate, UIN
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
         imagePicker.dismiss(animated: true, completion: nil)
         self.selectedImage = info[UIImagePickerControllerOriginalImage] as? UIImage
         photoView.image = selectedImage

@@ -12,9 +12,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         FIRAnalyticsConfiguration.sharedInstance().setAnalyticsCollectionEnabled(false)
         FIRApp.configure()
+        
         window = UIWindow(frame: UIScreen.main.bounds)
-        setupTabBar()
+        //setupTabBar()
         window?.makeKeyAndVisible()
+        window?.rootViewController = CustomTabBarController()
+        
+        
+        //UINavigationBar.appearance().barTintColor = UIColor(red: 51/255, green: 90/255, blue: 149/255, alpha: 1)
+        //UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.white]
         //window?.rootViewController = UINavigationController(rootViewController: ViewController())
         
         return true
@@ -58,6 +64,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
 
     }
+    
+
+    
+
     
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.

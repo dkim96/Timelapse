@@ -14,7 +14,7 @@ class TrendViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        navigationItem.title = "Trending"
         view.addSubview(profileImageView)
 
         setupProfileImageView()

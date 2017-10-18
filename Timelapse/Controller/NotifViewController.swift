@@ -18,13 +18,16 @@ class NotifViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
+        navigationItem.title = "Notifications"
+        //navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Cancel", style: .plain, target: self, action: #selector(handleCancel))
         
         tableView.register(UserCell.self, forCellReuseIdentifier: cellId)
-        
+        //setupNavBar()
         fetchUser()
+        //setupNavBar()
+        //navigationItem.title = "Facebook Feed"
     }
+
     
     override func viewDidAppear(_ animated: Bool) {
         //fetchUser()
