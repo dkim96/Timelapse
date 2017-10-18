@@ -69,12 +69,12 @@ extension ViewController { //functions related to the mapView
         multiPin5.removeFromSuperview()
         multiPin6.removeFromSuperview()
         //longPressView.isHidden = true
-        print("2")
+        //print("2")
     }
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         isColliding(curSpan: mapView.region.span.latitudeDelta)
-        
+        print(groups)
         //let userCoordinate = CLLocationCoordinate2D(latitude: 58.592725, longitude: 16.185962)
         //let eyeCoordinate = CLLocationCoordinate2D(latitude: 58.571647, longitude: 16.234660)
         //let mapCamera = MKMapCamera(lookingAtCenter: userCoordinate, fromEyeCoordinate: eyeCoordinate, eyeAltitude: 400.0)
@@ -90,13 +90,21 @@ extension ViewController { //functions related to the mapView
     
     func mapView(_ mapView: MKMapView, didSelect annotationView: MKAnnotationView) {
         print("clicked annot")
+        if annotationView.annotation is MKUserLocation{
+            mapView.deselectAnnotation(annotationView.annotation, animated: false)
+            return
+        }
         var check = true
         mapView.deselectAnnotation(annotationView.annotation, animated: false)
         if(groups.count > 0){
             for i in 0...groups.count-1{
                 for j in 0...groups[i].count-1{
-                    if((annotationView.annotation?.subtitle)! == String(groups[i][j])){
+                    if((annotationView.annotation?.title)! == String(pins[i][j])){
                         // access elements of groups[i], and position to create
+                        print(pins[i])
+                        print(annotationView.annotation?.title)
+                        
+                        
                         if(groups[i].count > 6){
                             var _region = mapView.region;
                             _region.center.longitude = (annotationView.annotation?.coordinate.longitude)!
@@ -110,28 +118,28 @@ extension ViewController { //functions related to the mapView
                         }
                         view.addSubview(longPressView)
                         if(groups[i].count == 2){
-                            enableImageUrls(groups: groups[i], annotationView: annotationView)
+                            enableImageUrls(groups: pins[i], annotationView: annotationView)
                             //////
                             longPressView.setImage(UIImage(named: "2"), for: .normal)
                             longPressView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 35).isActive = true
                         }
                         if(groups[i].count == 3){
-                            enableImageUrls(groups: groups[i], annotationView: annotationView)
+                            enableImageUrls(groups: pins[i], annotationView: annotationView)
                             longPressView.setImage(UIImage(named: "3"), for: .normal)
                             longPressView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 60).isActive = true
                         }
                         if(groups[i].count == 4){
-                            enableImageUrls(groups: groups[i], annotationView: annotationView)
+                            enableImageUrls(groups: pins[i], annotationView: annotationView)
                             longPressView.setImage(UIImage(named: "4"), for: .normal)
                             longPressView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 80).isActive = true
                         }
                         if(groups[i].count == 5){
-                            enableImageUrls(groups: groups[i], annotationView: annotationView)
+                            enableImageUrls(groups: pins[i], annotationView: annotationView)
                             longPressView.setImage(UIImage(named: "5"), for: .normal)
                             longPressView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 100).isActive = true
                         }
                         if(groups[i].count == 6){
-                            enableImageUrls(groups: groups[i], annotationView: annotationView)
+                            enableImageUrls(groups: pins[i], annotationView: annotationView)
                             longPressView.setImage(UIImage(named: "6"), for: .normal)
                             longPressView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 130).isActive = true
                         }
@@ -148,19 +156,22 @@ extension ViewController { //functions related to the mapView
             }
         }
         if(check){
+            print(annotationView.annotation?.title)
             let photoviewController = PhotoViewController()
             photoviewController.photoId = ((annotationView.annotation?.title)!)!
+            photoviewController.profilePic = images[((annotationView.annotation?.title)!)!]!
             present(photoviewController, animated: true, completion: nil)
         }
         
     }
     
-    func enableImageUrls(groups: [Int], annotationView: MKAnnotationView){
+    func enableImageUrls(groups: [String], annotationView: MKAnnotationView){
+        bubblePos = groups
         for i in 0...groups.count-1{
             if(i == 0){
                 view.addSubview(multiPin1)
                 
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin1.setImage(watermarkImage, for: .normal)
                 multiPin1.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x - 19).isActive = true
@@ -170,7 +181,7 @@ extension ViewController { //functions related to the mapView
             
             if(i == 1){
                 view.addSubview(multiPin2)
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin2.setImage(watermarkImage, for: .normal)
                 multiPin2.leftAnchor.constraint(equalTo: view.leftAnchor, constant: annotationView.frame.origin.x + 33).isActive = true
@@ -180,7 +191,7 @@ extension ViewController { //functions related to the mapView
             
             if(i == 2){
                 view.addSubview(multiPin3)
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin3.setImage(watermarkImage, for: .normal)
 
@@ -195,7 +206,7 @@ extension ViewController { //functions related to the mapView
             
             if(i == 3){
                 view.addSubview(multiPin4)
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin4.setImage(watermarkImage, for: .normal)
                 
@@ -210,7 +221,7 @@ extension ViewController { //functions related to the mapView
             
             if(i == 4){
                 view.addSubview(multiPin5)
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin5.setImage(watermarkImage, for: .normal)
                 
@@ -225,7 +236,7 @@ extension ViewController { //functions related to the mapView
             }
             if(i == 5){
                 view.addSubview(multiPin6)
-                let image: UIImage = images[groups[i]]
+                let image: UIImage = images[groups[i]]!
                 let watermarkImage = UIImage.roundedRectImageFromImage(image: image, imageSize: CGSize(width: 40, height: 40), cornerRadius: CGFloat(20))
                 multiPin6.setImage(watermarkImage, for: .normal)
                 
@@ -289,16 +300,19 @@ extension ViewController { //functions related to the mapView
         else {
             v!.annotation = annotation
         }
-        
-        let customPointAnnotation = annotation as! CustomPointAnnotation
-        v!.image = customPointAnnotation.customUIImage
-        //print("VIMAGE: \(v!.image)")
-        
         if annotation is MKUserLocation{
             return nil
         }
+
+        let customPointAnnotation = annotation as! CustomPointAnnotation
+        v!.image = customPointAnnotation.customUIImage
+        
+        //print("VIMAGE: \(v!.image)")
+        
+
         return v
     }
+
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         //if(locationRepeat){
@@ -310,6 +324,18 @@ extension ViewController { //functions related to the mapView
         xaddphotoController.getCoordinates(lat: locValue.latitude, lon: locValue.longitude)
         xaddphotoController.imgLat = myLatitude
         xaddphotoController.imgLon = myLongitude
+        
+        let location = locations[0]
+        
+        let span:MKCoordinateSpan = MKCoordinateSpanMake(0.01, 0.01)
+        let myLocation:CLLocationCoordinate2D = CLLocationCoordinate2DMake(location.coordinate.latitude, location.coordinate.longitude)
+        let region:MKCoordinateRegion = MKCoordinateRegionMake(myLocation, span)
+        //mapView.setRegion(region, animated: true)
+        
+        //print(location.altitude)
+        //print(location.speed)
+        
+        //self.mapView.showsUserLocation = true
     }
     
     func zoomToFitMapAnnotations(aMapView: MKMapView) {
